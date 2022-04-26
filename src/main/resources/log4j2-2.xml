@@ -1,0 +1,32 @@
+<Configuration monitorInterval="10">
+  <Appenders>
+    <Console name="consoleDeBase">
+      <PatternLayout>
+        <pattern>%d{ISO8601} [%t] %-5level %logger{40}(%L)- %msg%n%ex{130}</pattern>
+      </PatternLayout>
+    </Console>
+    <RollingFile name="logToRollingFile" fileName="${sys:chemin.log}/app-cfec-process.log"
+      filePattern="${sys:chemin.log}/$${date:yyyy-MM}/app-cfec-process-%d{MM-dd-yyyy}-%i.log.gz"
+    >
+      <PatternLayout>
+        <Pattern>%d{ISO8601} %p [%t] %c{1.} [%M:%L:%line] - %msg%n%ex{130}</Pattern>
+      </PatternLayout>
+      <Policies>
+        <TimeBasedTriggeringPolicy/>
+        <SizeBasedTriggeringPolicy size="200 MB"/>
+      </Policies>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="org.yal.test.shorturl.app" level="debug" additivity="false">
+      <AppenderRef ref="logToRollingFile"/>
+      <AppenderRef ref="consoleDeBase"/>
+    </Logger>
+    <root level="error">
+      <AppenderRef ref="logToRollingFile"/>
+      <AppenderRef ref="consoleDeBase"/>
+    </root>
+  </Loggers>
+
+</Configuration>

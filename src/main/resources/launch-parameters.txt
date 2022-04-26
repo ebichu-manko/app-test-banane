@@ -1,0 +1,1 @@
+-Dfichier.config="D:/dvp/projets/app-test-short-url/conf/config.properties" -DLOG_PATH="D:\dvp\projets\app-test-short-url\logs" -Dlogging.config="D:\dvp\projets\app-test-short-url\conf\config-logback.xml"

@@ -1,0 +1,40 @@
+<Configuration monitorInterval="10">
+  <Appenders>
+    <Console name="consoleDeBase">
+      <PatternLayout>
+        <pattern>%d{ISO8601} [%t] %-5level %logger{40} - %msg%n%ex{130}</pattern>
+      </PatternLayout>
+      <ThresholdFilter level="debug"/>
+    </Console>
+    <RollingFile name="LogToRollingFile" fileName="${sys:chemin.log}/app-control-integrite.log"
+                 filePattern="${sys:chemin.log}/$${date:yyyy-MM}/app-control-integrite-%d{MM-dd-yyyy}-%i.log.gz">
+      <PatternLayout>
+        <Pattern>%d{ISO8601} [%t] %p %c{1.} - %msg%n%ex{130}</Pattern>
+<!--         <Pattern>%d{ISO8601} [%t] [%p] [%c{1.}]  [[%-5level]] [%logger{40}] - %msg%n%ex{130}</Pattern> -->
+      </PatternLayout>
+      <Policies>
+        <TimeBasedTriggeringPolicy/>
+        <SizeBasedTriggeringPolicy size="200 MB"/>
+      </Policies>
+    </RollingFile>
+    <Async name="console">
+      <AppenderRef ref="consoleDeBase"/>
+    </Async>
+    <Async name="rotateFile">
+      <AppenderRef ref="LogToRollingFile"/>
+    </Async>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="com.cecurity.cfec.app" level="DEBUG" additivity="false">
+      <AppenderRef ref="rotateFile"/>
+    </Logger>
+    <Logger name="com.cecurity.batchs.cfec" level="DEBUG" additivity="false">
+      <AppenderRef ref="rotateFile"/>
+    </Logger>
+    <root level="INFO">
+      <AppenderRef ref="rotateFile"/>
+    </root>
+  </Loggers>
+
+</Configuration>

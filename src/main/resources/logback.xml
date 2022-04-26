@@ -1,0 +1,58 @@
+<configuration scan="true" scanPeriod="5000">
+  
+  <appender name="syncFichier" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/${CONTEXT_NAME}.log</file>
+    <append>true</append>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_PATH}/${CONTEXT_NAME}.%d{yyyyMMdd}.%i.log</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>200MB</maxFileSize>
+    </timeBasedFileNamingAndTriggeringPolicy>
+    <maxHistory>20</maxHistory>
+    </rollingPolicy>
+
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%date{"yyyyMMdd' 'HH:mm:ss','SSS' 'XX"} %contextName [%thread] %-5level %logger{10}.%method:%line - %msg%n%ex{full}</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="syncConsole" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%date{"yyyyMMdd' 'HH:mm:ss','SSS' 'XX"} %contextName [%thread] %-5level %logger{10}.%method:%line - %msg%n%ex{full}</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="console" class="ch.qos.logback.classic.AsyncAppender">
+    <discardingThreshold>0</discardingThreshold>
+    <includeCallerData>true</includeCallerData>
+    <neverBlock>true</neverBlock>
+    <appender-ref ref="syncConsole" />
+  </appender>
+  
+  <appender name="fichier" class="ch.qos.logback.classic.AsyncAppender">
+    <discardingThreshold>0</discardingThreshold>
+    <includeCallerData>true</includeCallerData>
+    <neverBlock>true</neverBlock>
+    <appender-ref ref="syncFichier" />
+  </appender>
+
+  <logger name="org.yal.test.shorturl" additivity="false" level="DEBUG">
+    <appender-ref ref="console" />
+    <appender-ref ref="fichier" />
+  </logger>
+  
+  <logger name="org.apache.http.wire" additivity="false" level="ERROR">
+    <appender-ref ref="console" />
+    <appender-ref ref="fichier" />
+  </logger>
+  
+  <root level="INFO">
+    <appender-ref ref="console" />
+    <appender-ref ref="fichier" />
+  </root>
+
+</configuration>
+
